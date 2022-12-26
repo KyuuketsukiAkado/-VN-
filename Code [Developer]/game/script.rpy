@@ -1022,6 +1022,27 @@ label talk_to_scriptwriter:
 
     return
 
+screen choose_pc:
+    imagebutton:
+        auto "choose pc %s"
+        action Call("work_on_pc")
+        at pc
+        
+transform pc:
+    xalign 0.16
+    yalign 0.48
+
+screen choose_door:
+    imagebutton:
+        auto "choose door %s"
+        action Call("go_to_kitchen")
+        at door
+
+transform door:
+    xalign 0.385
+    yalign 0.4
+
+
 label at_home:
     scene bg room
     with fade
@@ -1045,49 +1066,117 @@ label at_home:
     $ csay(s, "Ничем не пахнет", 1.0)
     $ csay(s, "...", 1.0)
     $ csay(s, "Опять самому готовить")
-    
 
-    menu:
-        "Пойти на кухню":
-            call go_to_kitchen
-        "Сесть за компьютер":
-            call work_on_pc
+    show screen choose_pc
+    show screen choose_door
+    with dissolve
+
+    python:
+        ui.interact()
+
     return
 
+label choose_stove:
+    hide screen choose_fridge
+    hide screen choose_stove_1st_time
+    hide screen choose_stove_2nd_time
+
+    scene bg stove
+    with fade
+
+    $ csay(s, "Я, конечно, не в Европе, но просто так включать газ - плохая идея")
+
+    $ has_tried_turning_on_gas = True
+    jump go_to_kitchen
+    return
+
+screen choose_stove_1st_time:
+    imagebutton:
+        auto "choose stove %s"
+        action Call("choose_stove")
+        at stovepos
+
+screen choose_stove_2nd_time:
+    imagebutton:
+        auto "choose stove %s"
+        action Call("eat_food")
+        at stovepos
+
+transform stovepos:
+    xalign 0.59
+    yalign 0.999
+
+transform fridgepos:
+    xalign 0.03
+    yalign 0.999
+
+screen choose_fridge:
+    imagebutton:
+        auto "choose fridge %s"
+        action Call("fridge")
+        at fridgepos
 
 define has_tried_turning_on_gas = False
 define has_picked_up_food = False
 
 label go_to_kitchen:
+    hide screen choose_door
+    hide screen choose_pc
+    hide screen choose_eggs_s
+    hide screen choose_yoghurt_s
+
     scene bg kitchen
     with fade
 
     if has_picked_up_food:
-        menu:
-            "Включить плиту":
-                call eat_food
+        show screen choose_stove_2nd_time
+        with dissolve
     elif not has_tried_turning_on_gas:
-        menu:
-            "Включить плиту":
-                scene bg stove
-                with fade
-
-                $ csay(s, "Я, конечно, не в Европе, но просто так включать газ - плохая идея")
-
-                $ has_tried_turning_on_gas = True
-                jump go_to_kitchen
-
-            "Открыть холодильник":
-                call fridge
+        show screen choose_stove_1st_time
+        show screen choose_fridge
+        with dissolve
     else:
-        menu:
-            "Открыть холодильник":
-                call fridge
-    
+        show screen choose_fridge
+        with dissolve
+
+    python:
+        ui.interact()
+
     return
 
+transform yoghurtpos:
+    xalign 0.37
+    yalign 0.5
+
+transform eggspos:
+    xalign 0.45
+    yalign 0.93
+
+screen choose_yoghurt_s:
+    imagebutton:
+        hover "yoghurt hover.png"
+        idle "yoghurt idle.png"
+        action Call("ending_1_death_from_sugar")
+        at yoghurtpos
+
+screen choose_eggs_s:
+    imagebutton:
+        hover "eggs hover.png"
+        idle "eggs idle.png"
+        action Jump("choose_eggs")
+        at eggspos
+
 label fridge:
-    scene bg fridge
+    hide screen choose_stove_1st_time
+    hide screen choose_stove_2nd_time
+    hide screen choose_fridge 
+
+    image yoghurt = "yoghurt idle.png"
+    image eggs = "eggs idle.png"
+
+    scene bg empty fridge
+    show yoghurt at yoghurtpos
+    show eggs at eggspos
     with fade
 
     $ csay(s, "Так, что мы имеем в нашем распоряжении?", 4.0)
@@ -1095,16 +1184,31 @@ label fridge:
     $ csay(s, "Яйца и самый обычный йогурт", 3.0)
     $ csay(s, "...", 1.0)
     $ csay(s, "По крайней мере, хоть какой-то выбор имеется")
-    menu:
-        "Йогурт":
-            jump ending_1_death_from_sugar
-        "Яйца":
-            $ csay(s, "Яйца, так яйца")
-            $ has_picked_up_food = True
-            jump go_to_kitchen
+    
+    show screen choose_eggs_s
+    show screen choose_yoghurt_s
+
+    python:
+        ui.interact()
+
+    return
+            
+
+label choose_eggs:
+    hide screen choose_eggs_s
+    hide screen choose_yoghurt_s
+    $ csay(s, "Яйца, так яйца")
+    $ has_picked_up_food = True
+    jump go_to_kitchen
+
+    return
 
 
 label eat_food:
+    hide screen choose_stove_1st_time
+    hide screen choose_stove_2nd_time
+    hide screen choose_fridge
+
     scene bg stove
     with fade
 
@@ -1120,6 +1224,11 @@ label eat_food:
     return
 
 label work_on_pc:
+    hide screen choose_door
+    hide screen choose_pc
+
+    $ csay(s, "...")
+    call go_to_kitchen
     return
 
 
