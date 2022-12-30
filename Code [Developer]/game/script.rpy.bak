@@ -22,22 +22,24 @@ init python:
             char(text, interact=True, ctc="ctc")
 
 label start:
-    call prologue from _call_prologue
-    call first_day from _call_first_day
-    call second_day from _call_second_day
-    call third_day from _call_third_day
-    call fourth_day from _call_fourth_day
+    # jump start_pos
+
+    call prologue
+    call first_day
+    call second_day
+    call third_day
+    call fourth_day
 
     return
 
 label prologue:
-    call at_home from _call_at_home
-    call bus_stop from _call_bus_stop
+    call at_home
+    call bus_stop
 
     scene bg black
     with fade
     "Спустя одну не самую приятную поездку"
-    call uni from _call_uni
+    call uni
 
     return
 
@@ -73,9 +75,7 @@ label first_day:
     scene bg pc
     with fade
 
-    play sound "<from 0 to 1>audio/vk.mp3"
-    pause 2
-
+    $ csay(Character('Вконтакте'), "{i}Звук уведомления{/i}")
     $ csay(s, "Интересно, кому я мог понадобиться.")
     $ csay(s, "Паша!? Давно с ним не общался, может взломали?")
 
@@ -257,8 +257,7 @@ label first_day:
     with fade
 
     $ csay(s, "Удивительно, как может жизнь поменяться за один день. Кого-то сбивает машина, а меня вот пригласили в команду по разработке игр. Что вершит судьбу человека....")
-    $ csay(s, "Когда я только начинал свой путь, я мечтал создавать игры, но с каждым годом, смотря новости, всё больше разочаровывался в них.")
-    $ csay(s, "И вот, когда, казалось бы, индустрия лежит в гробу, находятся два человека, которые хватаются за лучик света, проникающий сквозь не до конца забитую крышку, и я, позабыв всё своё разочарование, следую за ними...")
+    $ csay(s, "Когда я только начинал свой путь, я мечтал создавать игры, но с каждым годом, смотря новости, всё больше разочаровывался в них. И вот, когда, казалось бы, индустрия лежит в гробу, находятся два человека, которые хватаются за лучик света, проникающий сквозь не до конца забитую крышку, и я, позабыв всё своё разочарование, следую за ними...")
     
     $ csay(s, "...", 1)
     $ csay(s, "...", 1)
@@ -268,7 +267,7 @@ label first_day:
 
     if not lied_about_math:
         $ csay(s, "А, и ещё в библиотеку...", 1)
-        $ csay(s, "Только я думал, что мои мучения окончены...")
+        $ csay(s, "Только я думал, что мои мучения окончены...", 1)
         $ csay(s, "Ну что ж, значит я ошибался.")
         
     return
@@ -562,8 +561,7 @@ label no_investor_route:
     $ csay(s, "Не знаю, может зря мы отказываемся от финансовой помощи. Кто знает, далеко ли мы уедем на простом желании.", 1)
     $ csay(s, "Да и как раскручивать игру, надо либо огромные деньги в рекламную кампанию вкладывать, либо надеяться на чудо...")
 
-    play sound "<from 0 to 4>audio/phone.mp3"
-    pause 4 
+    $ csay(Character("Телефон"), "{i}*Бззззз*{/i}")
 
     $ csay(Character("{i}Сообщение от Лизы{/i}"), "Привет, может всё-таки поговоришь с Пашей на счёт инвестора?", 1)
     $ csay(Character("{i}Сообщение от Лизы{/i}"), "А то я так размышляла, мы ж без денег загнёмся от голода просто. Тебе разве самому хочется бомжевать?")
@@ -587,8 +585,7 @@ label no_investor_route:
 
     $ csay(s, "Надо позвонить Паше.")
 
-    play sound "<from 2 to 4.5>audio/call.mp3"
-    pause 3 
+    $ csay(Character("Телефон"), "{i}*Гудки вызова*{/i}")
 
     $ csay(p, "Привет.")
 
@@ -624,8 +621,7 @@ label no_investor_route:
 
     $ csay(s, "Ну, значит, надо поговорить с ним.")
 
-    play sound "<from 2 to 4.5>audio/call.mp3"
-    pause 3 
+    $ csay(Character("Телефон"), "{i}*Гудки вызова*{/i}")
 
     $ csay(zh, "Привет, Серый, что хочешь?")
 
@@ -639,8 +635,7 @@ label no_investor_route:
 
     $ csay(zh, "Пока")
     
-    play sound "<from 0 to 3>audio/endcall.mp3"
-    pause 3.5
+    $ csay(Character("Телефон"), "{i}*Гудки*{/i}")
 
     $ csay(s, "Алё? Алё?")
     $ csay(s, "Доброе дело – правду говорить смело.")
@@ -648,9 +643,7 @@ label no_investor_route:
     return
 
 label investor_route:
-    
-    play sound "<from 0 to 4>audio/phone.mp3" volume 0.5
-    pause 4 
+    $ csay(Character("Телефон"), "{i}*Бззззз*{/i}")
 
     $ csay(s, "Алё")
 
@@ -759,9 +752,6 @@ label investor_route:
     return
 
 label third_day:
-    scene bg black
-    with fade
-    "На следующий день..."
     scene bg park
     with fade
 
@@ -769,9 +759,9 @@ label third_day:
     $ csay(s, "С другой стороны права и Лиза, что может сделать одинокий инди разработчик, если не счастливая случайность никто не узнает про нашу игру....")
 
     if not agreed_with_liza:
-        call no_investor_route from _call_no_investor_route
+        call no_investor_route
     else:
-        call investor_route from _call_investor_route
+        call investor_route
 
     return
 
@@ -812,212 +802,15 @@ label fourth_day:
     hide pasha
     hide zhenya
     hide coder
-    show screen monitor_s
     with dissolve
-    python:
-        ui.interact()
 
-    scene bg black
-    with fade
+    menu:
+        "Комп":
+            scene bg black
+            with fade
 
-    "Спасибо за игру"
+            "В таком ключе проходят последующие дни. Однако всему наступает свой черёд, так и *игра нейм* пора увидеть свет"
 
-    return
-
-label ending:
-    hide screen monitor_s
-    scene bg black
-    with fade
-
-    "В таком ключе проходят последующие дни. Однако всему наступает свой черёд, так и *игра нейм* пора увидеть свет"
-
-    call choose_ending
-
-    return
-
-screen monitor_s:
-    imagebutton:
-        idle "monitor idle"
-        hover "monitor hover"
-        action Call("ending")
-        at monitorpos
-
-transform monitorpos:
-    xalign 0.475
-    yalign 0.75
-
-label choose_ending:
-    define rc = relationship_w_coder
-    define rt = relationship_w_teamlead
-    define rs = relationship_w_scriptwriter
-
-    call preending
-
-    if not agreed_with_liza and (rc < 0 and rt < 0 and rs < 0):
-        call ending1
-    elif rt == 0 and rc < 0 and rs == 0:
-        call ending211
-    elif rt == 0 and rs < 0 and rc == 0:
-        call ending212
-    elif rt == 0 and rs > 0 and rc < 0:
-        call ending221
-    elif rt == 0 and rs < 0 and rc > 0:
-        call ending222
-    elif rt > 0 and rc < 0 and rs == 0:
-        call ending231
-    elif rt > 0 and rs < 0 and rc == 0:
-        call ending232
-    elif rt > 0 and rs > 0 and rc < 0:
-        call ending241
-    elif rt > 0 and rs < 0 and rc > 0:
-        call ending242    
-    elif not agreed_with_liza and rc == 0 and rt == 0 and rs == 0:
-        call ending25
-    elif not agreed_with_liza and ((rc > 0 and rt > 0) or (rt > 0 and rs > 0) or (rc > 0 and rs > 0)):
-        call ending26
-    elif rt < 0:
-        call ending411
-    elif rc > 0 and rs < 0:
-        call ending412
-    elif rc < 0:
-        call ending413
-    elif rs < 0:
-        call ending414
-    elif rc == 0 and rs == 0 and rt == 0:
-        call ending42
-    elif (rc > 0 and rt > 0) or (rt > 0 and rs > 0) or (rc > 0 and rs > 0):
-        call ending43
-
-    $ renpy.pause(2, hard=True)
-    return
-
-label preending:
-    scene bg black
-    with fade
-
-    $ renpy.pause(1, hard=True)
-    "Конец"
-    $ renpy.pause(1, hard=True)
-
-    return
-
-label ending411:
-    scene ending411
-    with fade
-    $ renpy.pause(2, hard=True)
-    "Ваша игра ушла в производственный ад, ты покинул команду"
-    return
-
-label ending412:
-    scene ending412
-    with fade
-    $ renpy.pause(2, hard=True)
-    "Ваша игра не произвела никакого эффекта. Команду решену распустить"
-    return
-
-label ending413:
-    scene ending413
-    with fade
-    $ renpy.pause(2, hard=True)
-    "Ваша игра не произвела никакого эффекта. Команду решену распустить"
-    return
-
-label ending414:
-    scene ending414
-    with fade
-    $ renpy.pause(2, hard=True)
-    "Ваша игра не произвела никакого эффекта. Команду решену распустить"
-    return
-
-label ending42:
-    scene ending42
-    with fade
-    $ renpy.pause(2, hard=True)
-    "Ваша игра не произвела ожидаемого эффекта, но решено сохранить команду и продолжить работу"
-    return
-
-label ending43:
-    scene ending43
-    with fade
-    $ renpy.pause(2, hard=True)
-    "Живительный свет вашей игры вернул веру в геймдев, команду решено сохранить и расширить"
-    return
-
-label ending1:
-    scene ending1
-    with fade
-    $ renpy.pause(2, hard=True)
-    "Ваша команда распалась так и не выпустив игру, индустрия продолжает пребывать в кризисе"
-    return
-
-label ending211:
-    scene ending1
-    with fade
-    $ renpy.pause(2, hard=True)
-    "Ваша команда распалась, лучик надежды мелькнул для индустрии... и погас"
-    return
-
-label ending212:
-    scene ending1
-    with fade
-    $ renpy.pause(2, hard=True)
-    "Ваша команда распалась, лучик надежды мелькнул для индустрии... и погас"
-    return
-
-label ending221:
-    scene ending221241
-    with fade
-    $ renpy.pause(2, hard=True)
-    "Ваша команда распалась, но ваш релиз вернул веру в геймдев, ты продолжишь работать в нём"
-    return
-
-label ending222:
-    scene ending222242
-    with fade
-    $ renpy.pause(2, hard=True)
-    "Ваша команда сохранилась, но понесла потери в виде сценариста, вы продолжите работать над новыми проектами без сюжета"
-    return
-
-label ending231:
-    scene ending1
-    with fade
-    $ renpy.pause(2, hard=True)
-    "Ваша команда сохраняется, несмоторя на полный провал игры"
-    return
-
-label ending232:
-    scene ending1
-    with fade
-    $ renpy.pause(2, hard=True)
-    "Ваша команда сохраняется, несмоторя на полный провал игры"
-    return
-
-label ending241:
-    scene ending221241
-    with fade
-    $ renpy.pause(2, hard=True)
-    "Ваша команда сохраняется. Ваш релиз вернул веру в геймдев, вы продолжаете работу над новыми проектами"
-    return
-
-label ending242:
-    scene ending222242
-    with fade
-    $ renpy.pause(2, hard=True)
-    "Ваша команда сохраняется. Ваш релиз вернул веру в геймдев, вы продолжаете работу над новыми проектами"
-    return
-
-label ending25:
-    scene ending25
-    with fade
-    $ renpy.pause(2, hard=True)
-    "Ваша игра была встречена нейтрально, вы абсолютно не представляете, что делать дальше"
-    return
-
-label ending26:
-    scene ending26
-    with fade
-    $ renpy.pause(2, hard=True)
-    "Ваша игра перевернула представление об играх. Вы продолжите работать над новыми проектами, но уже в расширенном составе и со славой"
     return
 
 screen talk_to_pasha_s:
@@ -1153,7 +946,7 @@ label talk_to_pasha:
     with dissolve
 
     if not agreed_with_liza:
-        call talk_to_pasha_no_investor from _call_talk_to_pasha_no_investor
+        call talk_to_pasha_no_investor
         hide pasha
         with dissolve
         return
@@ -1272,7 +1065,7 @@ label talk_to_liza:
     with dissolve
 
     if not agreed_with_liza:
-        call talk_to_liza_no_investor from _call_talk_to_liza_no_investor
+        call talk_to_liza_no_investor
         hide coder
         with dissolve
         return
@@ -1461,8 +1254,6 @@ label at_home:
     scene bg room
     with fade
 
-    play sound "audio/alarm.mp3" volume 0.5
-
     $ csay(Character("Будильник"), "{i}*Дзынь-Дзынь*{/i}")
 
     $ csay(s, "Мне определённо что-то снилось, но что...")
@@ -1529,7 +1320,6 @@ screen choose_fridge:
 
 define has_tried_turning_on_gas = False
 define has_picked_up_food = False
-define chose_eggs = False
 
 label go_to_kitchen:
     hide screen choose_door
@@ -1539,29 +1329,14 @@ label go_to_kitchen:
 
     scene bg kitchen
     with fade
-    
-    if has_picked_up_food and chose_eggs:
+
+    if has_picked_up_food:
         show screen choose_stove_2nd_time
         with dissolve
-
-    elif has_picked_up_food and not chose_eggs:
-        pause 1.5
-        $ csay(s, "Вкусный")
-        $ csay(s, "Я бы ещё чего-нибудь съел, но пора идти.")
-
-        window hide
-        scene bg black
-        with fade
-
-        "Спустя все утренние ритуалы..."
-
-        return
-
     elif not has_tried_turning_on_gas:
         show screen choose_stove_1st_time
         show screen choose_fridge
         with dissolve
-    
     else:
         show screen choose_fridge
         with dissolve
@@ -1583,7 +1358,7 @@ screen choose_yoghurt_s:
     imagebutton:
         hover "yoghurt hover.png"
         idle "yoghurt idle.png"
-        action Call("choose_yoghurt")
+        action Call("ending_1_death_from_sugar")
         at yoghurtpos
 
 screen choose_eggs_s:
@@ -1617,21 +1392,11 @@ label fridge:
         ui.interact()
 
     return
-
-label choose_yoghurt:
-    hide screen choose_eggs_s
-    hide screen choose_yoghurt_s
-    $ csay(s, "Йогурт, так йогурт")
-    $ has_picked_up_food = True
-    jump go_to_kitchen
-
-    return
             
 
 label choose_eggs:
     hide screen choose_eggs_s
     hide screen choose_yoghurt_s
-    $ chose_eggs = True
     $ csay(s, "Яйца, так яйца")
     $ has_picked_up_food = True
     jump go_to_kitchen
@@ -1643,11 +1408,11 @@ label eat_food:
     hide screen choose_stove_1st_time
     hide screen choose_stove_2nd_time
     hide screen choose_fridge
-    if chose_eggs:
-        scene bg stove
-        with fade
 
-        $ csay(Character("Яйца"), "{i}*Пшшшшш* *брызг* *брызг*{/i}")
+    scene bg stove
+    with fade
+
+    $ csay(Character("Яйца"), "{i}*Пшшшшш* *брызг* *брызг*{/i}")
 
     $ csay(s, "Теперь можно и поесть наконец")
 
@@ -1663,11 +1428,8 @@ label work_on_pc:
     hide screen choose_door
     hide screen choose_pc
 
-    scene bg pc
-    with fade
-
     $ csay(s, "...")
-    call go_to_kitchen from _call_go_to_kitchen
+    call go_to_kitchen
     return
 
 
@@ -1711,7 +1473,7 @@ label bus_stop:
     $ csay(s, "{i}Спасибо всевышнему, что мне больше не придется иметь с ней никаких дел*{/i}")
 
     scene bg bus
-    with fade
+    with dissolve
 
     $ csay(s, "Вот и мой приехал. Kак всегда забит")
 
@@ -1752,11 +1514,10 @@ label uni:
 
     $ csay(m, "Кажется, начинается. Пошли уже к сцене")
 
-    define prof = Character("Профессор")
-
-    hide misha
-    hide langepad
+    scene tribune
     with dissolve
+
+    define prof = Character("Профессор")
 
     $ csay(prof, "Дорогие выпускники!")
     $ csay(prof, "Сo многими из вас сегодня мы прощаемся навсегда.")
